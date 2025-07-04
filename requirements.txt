@@ -1,7 +1,7 @@
-google-api-python-client
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-flask
+mcp[cli]
 requests
+google-api-python-client
+google-auth-oauthlib
 openai
+python-dotenv
+pydantic

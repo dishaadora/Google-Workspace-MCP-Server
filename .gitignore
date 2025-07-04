@@ -1,3 +1,6 @@
-client_secret.json
 .venv
 notes.txt
+.env
+__pycache__
+desktop_client_secrets.json
+token.json
