@@ -1,7 +1,5 @@
 mcp[cli]
-requests
+mcp-use
 google-api-python-client
 google-auth-oauthlib
-openai
-python-dotenv
-pydantic
+langchain-openai

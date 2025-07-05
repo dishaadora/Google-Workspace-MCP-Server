@@ -1,8 +1,3 @@
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 CLIENT_SECRETS_FILE = "desktop_client_secrets.json"
 
 SCOPES = [
@@ -11,4 +6,4 @@ SCOPES = [
     'https://www.googleapis.com/auth/calendar.events'
 ]
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MCP_SERVER_ABS_PATH = "C:/Users/ccpep/Desktop/projects/gsuite-mcp-server/mcp-server.py"
