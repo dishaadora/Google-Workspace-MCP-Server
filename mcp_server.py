@@ -11,10 +11,14 @@ from googleapiclient.errors import HttpError
 
 from mcp.server.fastmcp import FastMCP, Context
 from pydantic import BaseModel, Field
-from config import SCOPES
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TOKEN_PATH = os.path.join(SCRIPT_DIR, 'token.json')
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.readonly',
+    'https://www.googleapis.com/auth/gmail.send',
+    'https://www.googleapis.com/auth/calendar.events'
+]
 
 # --- Lifespan Management for Credentials ---
 

@@ -1,9 +1,8 @@
+import os
 import asyncio
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from mcp_use import MCPAgent, MCPClient
-
-from config import MCP_SERVER_ABS_PATH
 
 async def main():
    load_dotenv()
@@ -11,7 +10,7 @@ async def main():
       "mcpServers": {
          "gsuite": {
             "command": "python",
-            "args": [f"{MCP_SERVER_ABS_PATH}"],
+            "args": [f"{os.getenv("MCP_SERVER_ABS_PATH")}"],
          }
       }
    }
