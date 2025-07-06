@@ -2,23 +2,6 @@
 
 A Model Context Protocol (MCP) server that acts as a secure bridge between your personal Google Workspace account (Gmail, Calendar, etc.) and any MCP-compatible AI client, such as a custom agent built with `mcp-use`.
 
-## The Concept: Your Personal AI Assistant
-
-Large Language Models are incredibly powerful, but they are limited by the information they were trained on. They don't know about your schedule, your emails, or your personal data.
-
-This MCP server solves that problem. It securely connects to your Google account and exposes specific functionalities (like "read the last email" or "create a calendar event") as **tools** that an AI can use.
-
-Imagine giving your AI agent a task:
-
-> "Read my last email and create a calendar event based on its content."
-
-With this server running, the AI can:
-1.  Call the `read_latest_gmail_email` tool to get the content of your email.
-2.  Understand the context and details for an event.
-3.  Call the `create_calendar_event` tool to add it directly to your Google Calendar.
-
-All of this happens through a secure, permission-based flow, giving you a powerful, personalized AI assistant that can automate your daily tasks.
-
 ## Features
 
 *   **Google Calendar**:
@@ -161,7 +144,7 @@ Instead of a pre-built application, we will use `mcp-use` to create a powerful, 
     python mcp_client.py
     ```
 
-The script will automatically start your GSuite MCP server, connect to it, and run the specified task.
+The script will automatically start the MCP server, connect to it, and run the specified task.
 
 ## Roadmap & Future Plans
 
