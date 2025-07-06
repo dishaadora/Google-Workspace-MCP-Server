@@ -2,15 +2,7 @@ import os
 import google.oauth2.credentials
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-TOKEN_PATH = os.path.join(SCRIPT_DIR, "token.json")
-CLIENT_SECRETS_PATH = os.path.join(SCRIPT_DIR, "desktop_client_secrets.json")
-SCOPES = [
-    'https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.send',
-    'https://www.googleapis.com/auth/calendar.events'
-]
+from config import TOKEN_PATH, SCOPES, CLIENT_SECRETS_PATH
 
 def main():
     creds = None

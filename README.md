@@ -21,12 +21,20 @@ All of this happens through a secure, permission-based flow, giving you a powerf
 
 ## Features
 
-Currently, this server supports the following tools:
-
-*   **Gmail**:
-    *   `read_latest_gmail_email`: Fetches the snippet and body of the most recent email in your inbox.
 *   **Google Calendar**:
-    *   `create_calendar_event`: Creates a new event in your primary calendar.
+    *   Effortlessly list and search for events on your primary calendar within a specific date range.
+    *   Create new events with detailed information like title, description, start, and end times.
+    *   Update existing events, allowing for partial modifications such as changing the title or time.
+    *   Delete events directly from your calendar.
+*   **Gmail**:
+    *   Read the content of your most recent email to stay up-to-date.
+    *   Search for specific emails by their subject line to find important conversations.
+    *   Compose and send new emails directly from your account.
+*   **Google Drive**:
+    *   Search for files and folders using powerful query strings.
+    *   Create new Google Docs with a specified title and initial content.
+    *   Update the entire content of an existing Google Doc.
+    *   Manage your files by moving them to the bin or deleting them permanently.
 
 ## Getting Started
 
@@ -159,11 +167,11 @@ The script will automatically start your GSuite MCP server, connect to it, and r
 
 This server is the foundation for a much larger vision. The goal is to provide a comprehensive MCP server for the entire Google Workspace suite. Future additions will include tools for:
 
-*   ✅ **Gmail** (reading)
-*   ✅ **Google Calendar** (creating events)
-*   📝 **Google Docs**: Create, read, and append to documents.
-*   📊 **Google Sheets**: Read data from sheets, append new rows, and even perform calculations.
-*   🗂️ **Google Drive**: List files, download content, and upload new files.
+*   📝 **Google Docs**: More granular document manipulation, such as appending text or reading specific sections instead of overwriting the whole file.
+*   📊 **Google Sheets**: Read data from sheets, append new rows, update cells, and even perform calculations.
+*   📨 New functionalities for **Gmail**.
+*   📅 New functionalities for **Google Calendar**.
+*   🗂️ New functionalities for **Google Drive**.
 
 Contributions are welcome!
 
