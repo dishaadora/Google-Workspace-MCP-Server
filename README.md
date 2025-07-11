@@ -1,6 +1,6 @@
 # Google Workspace MCP Server
 
-A Model Context Protocol (MCP) server that acts as a secure bridge between your personal Google Workspace account (Gmail, Calendar, etc.) and any MCP-compatible AI client, such as a custom agent built with `mcp-use`.
+A Model Context Protocol (MCP) server that acts as a secure bridge between your personal Google Workspace account (Gmail, Calendar, etc.) and any MCP-compatible AI client, such as Claude Desktop.
 
 ## Features
 
@@ -27,8 +27,7 @@ Follow these steps to set up the server and run the example AI agent.
 
 *   Python 3.9+ and `uv` (or `pip`).
 *   A Google Cloud project with the necessary APIs enabled.
-*   An LLM API Key (e.g., from OpenAI, Anthropic, etc.) for the client.
-*   The `mcp-use` library and its dependencies.
+*   Claude Desktop.
 
 ### Step 1: Configure your Google Cloud Project
 
@@ -40,6 +39,7 @@ You need to authorize this application to access your Google data. This is a one
     *   Go to "APIs & Services" -> "Library".
     *   Search for and **Enable** the **Gmail API**.
     *   Search for and **Enable** the **Google Calendar API**.
+    *   Search for and **Enable** the **Google Drive API**.
 4.  **Create OAuth Credentials**:
     *   Go to "APIs & Services" -> "Credentials".
     *   Click "Create Credentials" -> "OAuth client ID".
@@ -59,9 +59,8 @@ git clone <your-repo-url>
 cd <your-repo-name>
 uv venv # Create a virtual environment
 source .venv/bin/activate # On Windows: .venv\Scripts\activate
-# Install server and client dependencies
+# Install server dependencies
 uv install -r requirements.txt
-uv install mcp-use langchain-openai python-dotenv
 ```
 
 ### Step 3: Run the One-Time Authorization
@@ -78,73 +77,42 @@ python get_credentials.py
 
 ### Step 4: Set Up and Run the AI Agent Client
 
-Instead of a pre-built application, we will use `mcp-use` to create a powerful, custom AI agent that can interact with our server.
+As an example, I'll show you how to configure Claude Desktop as an MCP Client. However, you can use whatever MCP Client available on Internet.
 
-1. **Create a .env file**
-    Create a `.env` file in your project's root directory to store your environment variables.
-
-2.  **Set Your LLM API Key**:
-    ```bash
-    # .env
-    OPENAI_API_KEY="sk-..."
+1.  **Configure Claude Desktop**:
+    
+    (Windows) Open `C:\Users\<user>\AppData\Roaming\Claude\claude_desktop_config.json` and add 
+    ```json
+    {
+        "mcpServers": {
+            "GsuiteMCPServer": {
+                "command": "absolute-path-to-your-python-executable-in-virtual-environment",
+                "args": [
+                    "<mcp_server.py-abs-path>"
+                ]
+            }
+        }
+    }   
     ```
 
-3.  **Set Your Server Path**:
-    ```bash
-    # .env
-    MCP_SERVER_ABS_PATH="<your server abs path>"
-    ```
+2.  **Use the available tools**:
+    Ask Claude something like:
+    
+    - Create a Google Calendar Event based on the content of the last mail being sent to my inbox.
+      If you cannot create an event, create a sort of 'reminder event' in order to remind me to check that email.
+    
+    - Create a Google Docs drafting a trip plan in San Francisco.
+    
+    - Check what are my availabilities next week for a two-hours call with a customer.
 
-4.  **Create the Client Script**:
-    Create a file named `mcp_client.py` and add the following code. This script defines an agent that uses an OpenAI model to interact with your GSuite MCP server.
+    - Edit the start time of the meeting with the VCs to 10 A.M.
 
-    ```python
-    # mcp_client.py
-    import asyncio
-    from dotenv import load_dotenv
-    from langchain_openai import ChatOpenAI
-    from mcp_use import MCPAgent, MCPClient
+    - Search for new e-mails in my inbox talking about AI news.
 
-    from config import MCP_SERVER_ABS_PATH
+    - Send an email to my supplier telling him he's late and I need the next lot as soon as possible.
 
-    async def main():
-       load_dotenv()
-       config = {
-          "mcpServers": {
-             "gsuite": {
-                "command": "python",
-                "args": [f"{MCP_SERVER_ABS_PATH}"],
-             }
-          }
-       }
+    - Much more.
 
-       client = MCPClient.from_dict(config)
-
-       llm = ChatOpenAI(model="gpt-4o")
-
-       # Create agent with the client
-       agent = MCPAgent(llm=llm, client=client, max_steps=30)
-
-       result = await agent.run(
-          """
-          Create a Google Calendar Event based on the content of the last mail being sent to my inbox.
-          If you cannot create an event, create a sort of "reminder event" in order to remind me to check that email. 
-          """,
-       )
-       print(f"\nResult: {result}")
-
-    if __name__ == "__main__":
-       asyncio.run(main())
-    ```
-
-4.  **Run the Agent**:
-    Now, execute the client script from your terminal.
-
-    ```bash
-    python mcp_client.py
-    ```
-
-The script will automatically start the MCP server, connect to it, and run the specified task.
 
 ## Roadmap & Future Plans
 
