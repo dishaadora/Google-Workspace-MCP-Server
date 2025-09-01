@@ -196,6 +196,66 @@ def send_email(email_content: EmailContent, ctx: Context) -> Dict[str, str]:
     except HttpError as e:
         raise Exception(f"API Gmail error (HTTP {e.status_code}): {e.reason}")
 
+
+@server.tool()
+def list_gmail_senders(ctx: Context, max_results: int = 100) -> List[str]:
+    """
+    Lists unique sender email addresses from the user's Gmail inbox.
+
+    Args:
+        max_results: The maximum number of emails to scan for senders.
+    Returns:
+        A list of unique sender email addresses.
+    """
+    creds = get_creds_from_context(ctx)
+    try:
+        gmail_service = googleapiclient.discovery.build('gmail', 'v1', credentials=creds)
+        messages_list = gmail_service.users().messages().list(userId='me', maxResults=max_results).execute()
+        messages = messages_list.get('messages', [])
+        senders = set()
+        for msg_info in messages:
+            msg = gmail_service.users().messages().get(userId='me', id=msg_info['id'], format='metadata', metadataHeaders=['From']).execute()
+            headers = msg.get('payload', {}).get('headers', [])
+            for header in headers:
+                if header['name'].lower() == 'from':
+                    import re
+                    match = re.search(r'<(.+?)>', header['value'])
+                    email = match.group(1) if match else header['value']
+                    senders.add(email.strip())
+        return list(senders)
+    except HttpError as e:
+        raise Exception(f"API Gmail error (HTTP {e.status_code}): {e.reason}")
+
+@server.tool()
+def batch_delete_emails_from_senders(sender_emails: List[str], ctx: Context, max_results: int = 100) -> Dict[str, Any]:
+    """
+    Deletes all emails from the specified sender email addresses.
+
+    Args:
+        sender_emails: List of sender email addresses to delete emails from.
+        max_results: The maximum number of emails to delete per sender.
+    Returns:
+        A summary of the deletion.
+    """
+    creds = get_creds_from_context(ctx)
+    try:
+        gmail_service = googleapiclient.discovery.build('gmail', 'v1', credentials=creds)
+        total_deleted = 0
+        deleted_details = {}
+        for sender_email in sender_emails:
+            query = f'from:{sender_email}'
+            results = gmail_service.users().messages().list(userId='me', q=query, maxResults=max_results).execute()
+            messages = results.get('messages', [])
+            deleted_ids = []
+            for msg_info in messages:
+                gmail_service.users().messages().delete(userId='me', id=msg_info['id']).execute()
+                deleted_ids.append(msg_info['id'])
+            deleted_details[sender_email] = deleted_ids
+            total_deleted += len(deleted_ids)
+        return {"status": "Batch delete completed", "total_deleted": total_deleted, "details": deleted_details}
+    except HttpError as e:
+        raise Exception(f"API Gmail error (HTTP {e.status_code}): {e.reason}")
+
 # --- CALENDAR TOOLS ---
 
 @server.tool()
